@@ -1,9 +1,7 @@
 import discord
-from discord.ext import commands
 from discord import app_commands
 import Globals
 import requests
-import json
 import time
 import os
 from ChatBot import OpenaiChat
@@ -59,14 +57,14 @@ async def on_message(message):
 #Command to create a picture by sending the prompt to chatGPT beforehand. If no prompt is given a picture of food is created
 
 @tree.command(name = "create_gpt_picture", description = "Create pictures by providing a prompt or using the dafault one and sending it to chatGPT!", guild=discord.Object(id=Globals.SERVER_ID)) #Add the guild ids in which the slash command will appear. If it should be in all, remove the argument, but note that it will take some time (up to an hour) to register the command if it's for all guilds.
-async def create_gpt_picture(interaction, prompt : str ="Create one description of a food picture inspired by the following description. Instead of a croissant use any type of food or dish and write it at the beginnig in (): Golden croissant, whimsical layers, delicate mood, rustic props, soft lighting, pastel colors, elegant presentation, shallow depth of field, asymmetric composition, Nikon D850 with 50mm lens, golden hour, in the style of Dominique Ansel, capturing exquisite detail in full HD."):
+async def create_gpt_picture(interaction, prompt : str ="Create one description of a food picture inspired by the following description. Instead of a croissant use any type of food or dish and write it at the beginnig in (): Golden croissant, whimsical layers, delicate mood, rustic props, soft lighting, pastel colors, elegant presentation, shallow depth of field, asymmetric composition, Nikon D850 with 50mm lens, golden hour, in the style of Dominique Ansel, capturing exquisite detail in full HD.", attributes : str=""):
 
     await interaction.response.defer()
 
     try:
         imagePrompt = Chat.Create_Prompt(prompt)
-        await interaction.followup.send(prompt, ephemeral=True)
-        await ImagineApi(imagePrompt, interaction.channel_id)
+        await interaction.followup.send(prompt + " " + attributes, ephemeral=True)
+        await ImagineApi(imagePrompt + " " + attributes, interaction.channel_id)
     except:
 
         await interaction.followup.send(prompt + "\n Error, pleas try again later!", ephemeral=True)
@@ -168,43 +166,6 @@ async def set_upscale(interaction, scale:int):
         scaleby = scale
 
     await interaction.followup.send("Set scale to " + str(scaleby) +"x!", ephemeral=True)
-    
-
-    
-
-
-
-# @tree.command(name = "delete", description = "Delete all messages not containing an attachment!", guild=discord.Object(id=Globals.SERVER_ID))
-# async def delete(interaction):
-
-#     guild_id = Globals.SERVER_ID
-#     channel_id = 1110166937759129641
-
-#     guild = bot.get_guild(guild_id)
-#     channel = guild.get_channel(channel_id)
-
-#     await interaction.response.defer()
-
-#     async for message in channel.history(limit=500):
-#         if message.components == []:
-#             await message.delete()
-#             print("Message deleted!")
-
-
-
-# @tree.command(name = "test", description = "Placeholder for testing commands!", guild=discord.Object(id=Globals.SERVER_ID))
-# async def test(interaction):
-
-#     await ImagineApi("random stuff", interaction.channel_id)
-
-
-
-#Command which is suppposed to upload a picture to Instagram. RIGHT NOW IN DEVELOPMENT!
-
-@tree.command(name = "upload", description = "Upload immage to IG!", guild=discord.Object(id=Globals.SERVER_ID))
-async def upload(interaction):
-
-    r = requests.post("https://graph.facebook.com/v17.0/17841400008460056/media?image_url=https//www.example.com/images/bronz-fonz.jpg&caption=#BronzFonz")
 
 
 

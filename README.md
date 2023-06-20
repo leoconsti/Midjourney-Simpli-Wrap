@@ -111,3 +111,6 @@ Result: **The upscale value will be set to 6, and future use of the /upscale com
 - requests
 - snowflake-id
 - replicate
+
+
+### We greatly appreciate your ideas and suggestions!
